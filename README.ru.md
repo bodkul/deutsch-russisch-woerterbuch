@@ -8,13 +8,15 @@
 
 ## Запуск
 
-Нужны .NET 10 SDK и Node.js 24.
+Нужны .NET 10 SDK, Node.js 24 и контейнерный рантайм — Docker Desktop или Podman (требование Aspire).
 
 ```bash
 dotnet tool restore                                  # dotnet-ef
 dotnet run --project backend/Woerterbuch.Importer    # один раз: скачать и импортировать словарь
 dotnet run --project backend/Woerterbuch.AppHost     # API + фронтенд + дашборд Aspire
 ```
+
+После однократного импорта достаточно одной команды: AppHost сам запускает всё. Он выполняет `npm install` для фронтенда, запускает API, ждёт его health-check (`/health`) и затем запускает Vite-фронтенд с уже прописанным адресом API. API и фронтенд работают как локальные процессы, а не в контейнерах. AppHost можно запустить и из IDE (сделать `Woerterbuch.AppHost` стартовым проектом). Остановка AppHost (Ctrl+C) останавливает всё.
 
 Ссылка на дашборд печатается в консоли. Фронтенд открывается из дашборда (ресурс `frontend`). Импорт можно запустить и из дашборда кнопкой ▶ у ресурса `importer`.
 

@@ -8,13 +8,15 @@ Ein persönliches Deutsch-Russisch-Wörterbuch: DE↔RU-Suche im offenen Wörter
 
 ## Starten
 
-Benötigt werden das .NET 10 SDK und Node.js 24.
+Benötigt werden das .NET 10 SDK, Node.js 24 und eine Container-Runtime – Docker Desktop oder Podman (Voraussetzung von Aspire).
 
 ```bash
 dotnet tool restore                                  # dotnet-ef
 dotnet run --project backend/Woerterbuch.Importer    # einmalig: Wörterbuch herunterladen und importieren
 dotnet run --project backend/Woerterbuch.AppHost     # API + Frontend + Aspire-Dashboard
 ```
+
+Nach dem einmaligen Import reicht ein einziger Befehl: Der AppHost startet alles selbst. Er führt `npm install` für das Frontend aus, startet die API, wartet auf deren Health-Check (`/health`) und startet dann das Vite-Frontend mit bereits gesetzter API-Adresse. API und Frontend laufen als lokale Prozesse, nicht in Containern. Den AppHost kann man auch aus der IDE starten (`Woerterbuch.AppHost` als Startprojekt festlegen). Wird der AppHost beendet (Strg+C), stoppt alles.
 
 Der Link zum Dashboard wird in der Konsole ausgegeben. Das Frontend öffnet man über das Dashboard (Ressource `frontend`). Der Import lässt sich auch im Dashboard über die Schaltfläche ▶ der Ressource `importer` starten.
 
