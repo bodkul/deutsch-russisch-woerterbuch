@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/Woerterbuch.Api/Woerterbuch.Api.csproj" />
+    <Project Path="backend/Woerterbuch.AppHost/Woerterbuch.AppHost.csproj" />
+    <Project Path="backend/Woerterbuch.Core/Woerterbuch.Core.csproj" />
+    <Project Path="backend/Woerterbuch.Importer/Woerterbuch.Importer.csproj" />
+    <Project Path="backend/Woerterbuch.ServiceDefaults/Woerterbuch.ServiceDefaults.csproj" />
+    <Project Path="backend/Woerterbuch.Tests/Woerterbuch.Tests.csproj" />
+  </Folder>
+</Solution>
