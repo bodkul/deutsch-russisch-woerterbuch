@@ -61,6 +61,10 @@ cd frontend && npm run lint && npm run build
 
 Migrationen werden beim Start der API automatisch angewendet.
 
+## Lizenz
+
+Der Code steht unter der [MIT-Lizenz](LICENSE).
+
 ## Lizenz des Wörterbuchs
 
 [FreeDict](https://freedict.org) deu-rus, Daten von [WikDict](https://www.wikdict.com) / Wiktionary, Lizenz [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Das Wörterbuch selbst ist nicht Teil des Repositorys: Der Importer lädt es herunter.

@@ -61,6 +61,10 @@ cd frontend && npm run lint && npm run build
 
 Миграции применяются автоматически при старте API.
 
+## Лицензия
+
+Код распространяется по [лицензии MIT](LICENSE).
+
 ## Лицензия словаря
 
 [FreeDict](https://freedict.org) deu-rus, данные [WikDict](https://www.wikdict.com) / Wiktionary, лицензия [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Сам словарь в репозиторий не входит: его скачивает импортёр.
