@@ -1,0 +1,71 @@
+version: 2
+
+updates:
+  - package-ecosystem: nuget
+    directories:
+      - /backend/*
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    groups:
+      # Security fixes for transitive dependencies arrive in one PR
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      # Aspire SDK and hosting packages ship together.
+      aspire:
+        patterns:
+          - Aspire.*
+      # .NET runtime-aligned packages. After a bump, update dotnet-ef in
+      # dotnet-tools.json to the same EF Core version by hand.
+      dotnet:
+        patterns:
+          - Microsoft.AspNetCore.*
+          - Microsoft.EntityFrameworkCore*
+          - Microsoft.Extensions.*
+      opentelemetry:
+        patterns:
+          - OpenTelemetry*
+      tests:
+        patterns:
+          - Microsoft.NET.Test.Sdk
+          - xunit*
+          - coverlet.*
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      react:
+        patterns:
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+      production-dependencies:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
