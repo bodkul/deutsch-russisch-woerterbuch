@@ -2,7 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import i18n from '@/i18n'
 import type { components } from './schema'
 
-// Types are generated from the backend OpenAPI: `npm run gen:api` (the API must be running).
+// Types are generated from the backend OpenAPI: `pnpm gen:api` (the API must be running).
 export type WordDto = components['schemas']['WordDto']
 export type WordInput = components['schemas']['WordInput']
 export type DictEntryDto = components['schemas']['DictEntryDto']

@@ -9,7 +9,7 @@ var api = builder.AddProject<Projects.Woerterbuch_Api>("api")
 
 // Vite gets the API address via service discovery (services__api__*) and proxies /api.
 builder.AddViteApp("frontend", "../../frontend")
-    .WithNpm(install: true)
+    .WithPnpm(install: true)
     .WithReference(api)
     .WaitFor(api);
 

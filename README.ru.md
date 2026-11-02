@@ -16,11 +16,11 @@ dotnet run --project backend/Woerterbuch.Importer    # один раз: скач
 dotnet run --project backend/Woerterbuch.AppHost     # API + фронтенд + дашборд Aspire
 ```
 
-После однократного импорта достаточно одной команды: AppHost сам запускает всё. Он выполняет `npm install` для фронтенда, запускает API, ждёт его health-check (`/health`) и затем запускает Vite-фронтенд с уже прописанным адресом API. API и фронтенд работают как локальные процессы, а не в контейнерах. AppHost можно запустить и из IDE (сделать `Woerterbuch.AppHost` стартовым проектом). Остановка AppHost (Ctrl+C) останавливает всё.
+После однократного импорта достаточно одной команды: AppHost сам запускает всё. Он выполняет `pnpm install` для фронтенда, запускает API, ждёт его health-check (`/health`) и затем запускает Vite-фронтенд с уже прописанным адресом API. API и фронтенд работают как локальные процессы, а не в контейнерах. AppHost можно запустить и из IDE (сделать `Woerterbuch.AppHost` стартовым проектом). Остановка AppHost (Ctrl+C) останавливает всё.
 
 Ссылка на дашборд печатается в консоли. Фронтенд открывается из дашборда (ресурс `frontend`). Импорт можно запустить и из дашборда кнопкой ▶ у ресурса `importer`.
 
-Без Aspire: `dotnet run --project backend/Woerterbuch.Api`, а в другом терминале `cd frontend && npm run dev`.
+Без Aspire: `dotnet run --project backend/Woerterbuch.Api`, а в другом терминале `cd frontend && pnpm dev`.
 
 ## Структура
 
@@ -57,8 +57,8 @@ data/                          база woerterbuch.db и скачанный с�
 ```bash
 dotnet test                                                       # тесты бэкенда
 dotnet ef migrations add <Name> --project backend/Woerterbuch.Core --startup-project backend/Woerterbuch.Api -o Migrations
-cd frontend && npm run gen:api                                    # TS-типы из OpenAPI (API должен быть запущен)
-cd frontend && npm run lint && npm run build
+cd frontend && pnpm gen:api                                       # TS-типы из OpenAPI (API должен быть запущен)
+cd frontend && pnpm lint && pnpm build
 ```
 
 Миграции применяются автоматически при старте API.

@@ -16,11 +16,11 @@ dotnet run --project backend/Woerterbuch.Importer    # once: download and import
 dotnet run --project backend/Woerterbuch.AppHost     # API + frontend + Aspire dashboard
 ```
 
-After the one-time import, one command is enough: the AppHost starts everything by itself. It runs `npm install` for the frontend, starts the API, waits for its health check (`/health`) and then starts the Vite frontend with the API address already set. The API and the frontend run as local processes, not in containers. You can also start the AppHost from your IDE (set `Woerterbuch.AppHost` as the startup project). Stopping the AppHost (Ctrl+C) stops everything.
+After the one-time import, one command is enough: the AppHost starts everything by itself. It runs `pnpm install` for the frontend, starts the API, waits for its health check (`/health`) and then starts the Vite frontend with the API address already set. The API and the frontend run as local processes, not in containers. You can also start the AppHost from your IDE (set `Woerterbuch.AppHost` as the startup project). Stopping the AppHost (Ctrl+C) stops everything.
 
 The dashboard link is printed to the console. Open the frontend from the dashboard (the `frontend` resource). The import can also be started from the dashboard with the ▶ button on the `importer` resource.
 
-Without Aspire: `dotnet run --project backend/Woerterbuch.Api`, and in another terminal `cd frontend && npm run dev`.
+Without Aspire: `dotnet run --project backend/Woerterbuch.Api`, and in another terminal `cd frontend && pnpm dev`.
 
 ## Structure
 
@@ -57,8 +57,8 @@ Words are stored in `data/woerterbuch.db`. This folder is not tracked by git.
 ```bash
 dotnet test                                                       # backend tests
 dotnet ef migrations add <Name> --project backend/Woerterbuch.Core --startup-project backend/Woerterbuch.Api -o Migrations
-cd frontend && npm run gen:api                                    # TS types from OpenAPI (the API must be running)
-cd frontend && npm run lint && npm run build
+cd frontend && pnpm gen:api                                       # TS types from OpenAPI (the API must be running)
+cd frontend && pnpm lint && pnpm build
 ```
 
 Migrations are applied automatically when the API starts.
