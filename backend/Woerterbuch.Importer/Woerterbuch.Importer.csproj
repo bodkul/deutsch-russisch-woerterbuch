@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\Woerterbuch.Core\Woerterbuch.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpCompress" Version="0.50.7" />
+    <PackageReference Include="SharpCompress" />
   </ItemGroup>
 
   <PropertyGroup>
