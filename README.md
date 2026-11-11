@@ -69,4 +69,4 @@ The code is licensed under the [MIT License](LICENSE).
 
 ## Dictionary license
 
-[FreeDict](https://freedict.org) deu-rus, data from [WikDict](https://www.wikdict.com) / Wiktionary, licensed under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). The dictionary itself is not part of the repository: the importer downloads it.
+Missing headwords are added from the Russian Wiktionary dump by [kaikki.org](https://kaikki.org) (German entries with Russian glosses, CC BY-SA 4.0); FreeDict entries are never overridden. The dictionary itself is not part of the repository: the importer downloads it.

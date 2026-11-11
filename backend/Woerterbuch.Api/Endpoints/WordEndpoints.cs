@@ -1,23 +1,13 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Woerterbuch.Api.Models;
 using Woerterbuch.Core;
 using Woerterbuch.Core.Backup;
 using Woerterbuch.Core.Entities;
 using Woerterbuch.Core.Search;
 
-namespace Woerterbuch.Api;
-
-/// <summary>Word form data (create and edit).</summary>
-public record WordInput(
-    [property: Required, StringLength(200)] string De,
-    [property: AllowedValues("der", "die", "das", null)] string? Article,
-    [property: StringLength(200)] string? Plural,
-    [property: StringLength(50)] string? Pos,
-    [property: Required, StringLength(2000)] string Ru,
-    List<string>? Tags,
-    int? DictEntryId);
+namespace Woerterbuch.Api.Endpoints;
 
 public static class WordEndpoints
 {
@@ -91,7 +81,7 @@ public static class WordEndpoints
         .WithName("ImportWords")
         .WithSummary("Add words from an export file (deletes nothing)");
 
-        api.MapGet("/tags",async (WoerterbuchDbContext db, CancellationToken ct) =>
+        api.MapGet("/tags", async (WoerterbuchDbContext db, CancellationToken ct) =>
         {
             // The personal list is small, so collecting tags in memory is simplest.
             var all = await db.Words.AsNoTracking().Select(w => w.Tags).ToListAsync(ct);
@@ -108,17 +98,11 @@ public static class WordEndpoints
     private static void Apply(Word word, WordInput input)
     {
         word.De = input.De.Trim();
-        word.Article = Clean(input.Article);
-        word.Plural = Clean(input.Plural);
-        word.Pos = Clean(input.Pos);
+        word.Article = WordText.NullIfBlank(input.Article);
+        word.Plural = WordText.NullIfBlank(input.Plural);
+        word.Pos = WordText.NullIfBlank(input.Pos);
         word.Ru = input.Ru.Trim();
-        word.Tags = (input.Tags ?? [])
-            .Select(t => t.Trim())
-            .Where(t => t.Length > 0)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        word.Tags = WordText.CleanTags(input.Tags);
         word.DictEntryId = input.DictEntryId;
     }
-
-    private static string? Clean(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
 }

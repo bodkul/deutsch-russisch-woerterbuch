@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Woerterbuch.Core;
 using Woerterbuch.Core.Search;
 
-namespace Woerterbuch.Api;
+namespace Woerterbuch.Api.Endpoints;
 
 public static class SearchEndpoints
 {

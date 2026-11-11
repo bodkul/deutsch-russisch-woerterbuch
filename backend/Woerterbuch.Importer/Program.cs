@@ -12,7 +12,10 @@ using Woerterbuch.Importer;
 const string DownloadUrl =
     "https://download.freedict.org/dictionaries/deu-rus/2025.11.23/freedict-deu-rus-2025.11.23.src.tar.xz";
 
-var source = args.FirstOrDefault() ?? await DownloadAsync();
+const string WiktionaryUrl = "https://kaikki.org/dictionary/downloads/ru/ru-extract.jsonl.gz";
+
+var source = args.FirstOrDefault() ?? await DownloadAsync(DownloadUrl);
+var wiktionarySource = await DownloadAsync(WiktionaryUrl);
 
 var options = new DbContextOptionsBuilder<WoerterbuchDbContext>()
     .UseSqlite(Environment.GetEnvironmentVariable($"ConnectionStrings__{WoerterbuchDb.ConnectionName}")
@@ -28,21 +31,41 @@ if (await WordBackup.WriteAutoBackupAsync(db, WoerterbuchDb.BackupDirectory()) i
 
 var sw = Stopwatch.StartNew();
 await using var tei = FreeDictReader.OpenTei(source);
-var count = await DictImporter.ImportAsync(db, FreeDictReader.ReadEntries(tei));
+await using var wiktionary = WiktionaryReader.Open(wiktionarySource);
+var count = await DictImporter.ImportAsync(db, MergeSources(FreeDictReader.ReadEntries(tei), WiktionaryReader.ReadEntries(wiktionary)));
 Console.WriteLine($"Imported entries: {count} in {sw.Elapsed.TotalSeconds:F1} s");
 
-static async Task<string> DownloadAsync()
+// FreeDict entries are kept as they are; Wiktionary only adds headwords that FreeDict does not have.
+static IEnumerable<Woerterbuch.Core.Entities.DictEntry> MergeSources(
+    IEnumerable<Woerterbuch.Core.Entities.DictEntry> primary,
+    IEnumerable<Woerterbuch.Core.Entities.DictEntry> secondary)
 {
-    var path = Path.Combine(WoerterbuchDb.DataDirectory(), Path.GetFileName(new Uri(DownloadUrl).LocalPath));
+    var known = new HashSet<string>(StringComparer.Ordinal);
+    foreach (var entry in primary)
+    {
+        known.Add(entry.De);
+        yield return entry;
+    }
+
+    foreach (var entry in secondary)
+    {
+        if (!known.Contains(entry.De))
+            yield return entry;
+    }
+}
+
+static async Task<string> DownloadAsync(string url)
+{
+    var path = Path.Combine(WoerterbuchDb.DataDirectory(), Path.GetFileName(new Uri(url).LocalPath));
     if (File.Exists(path))
     {
         Console.WriteLine($"Already downloaded: {path}");
         return path;
     }
 
-    Console.WriteLine($"Downloading {DownloadUrl}");
-    using var http = new HttpClient();
-    await using (var response = await http.GetStreamAsync(DownloadUrl))
+    Console.WriteLine($"Downloading {url}");
+    using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
+    await using (var response = await http.GetStreamAsync(url))
     await using (var file = File.Create(path + ".part"))
         await response.CopyToAsync(file);
     File.Move(path + ".part", path, overwrite: true);

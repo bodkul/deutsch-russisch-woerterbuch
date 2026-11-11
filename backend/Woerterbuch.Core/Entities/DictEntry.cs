@@ -25,9 +25,13 @@ public class DictEntry : INormalizable
     public string DeNorm { get; set; } = "";
     public string RuNorm { get; set; } = "";
 
+    /// <summary>Extra searchable forms of the headword (e.g. plural). Only used for the search index, not stored.</summary>
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public string? Forms { get; set; }
+
     public void Normalize()
     {
-        DeNorm = TextNormalizer.DeIndexText(De);
+        DeNorm = TextNormalizer.DeIndexText(string.IsNullOrWhiteSpace(Forms) ? De : $"{De} {Forms}");
         RuNorm = TextNormalizer.NormalizeRu(Ru);
     }
 }
